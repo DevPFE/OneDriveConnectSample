@@ -25,7 +25,7 @@ namespace OneDriveConnectSample
     public sealed partial class MainPage : Page
     {
         // Client Apication Id.
-        private string clientId = "YourClientIDHere";
+        private string clientId = "YourClientIdHere";
 
         // Return url.
         private string returnUrl = "https://login.live.com/oauth20_desktop.srf";
@@ -45,56 +45,45 @@ namespace OneDriveConnectSample
         {
             if (this.oneDriveClient == null)
             {
-                // Setting up the client here, passing in our Client Id, Return Url, Scopes that we want permission to, 
-                // and building a Web Broker to go do our bidding. 
-                this.oneDriveClient = await OneDriveClient.GetAuthenticatedMicrosoftAccountClient(
-                    clientId, 
-                    returnUrl, 
-                    scopes, 
-                    webAuthenticationUi: new WebAuthenticationBrokerWebAuthenticationUi());
-            }
+                try
+                {
+                    // Setting up the client here, passing in our Client Id, Return Url, Scopes that we want permission to, 
+                    // and building a Web Broker to go do our authentication. 
+                    this.oneDriveClient = await OneDriveClient.GetAuthenticatedMicrosoftAccountClient(
+                        clientId,
+                        returnUrl,
+                        scopes,
+                        webAuthenticationUi: new WebAuthenticationBrokerWebAuthenticationUi());
 
-            try
-            {
-                // Now that we have our client built, lets get authenticated!
-                if (!this.oneDriveClient.IsAuthenticated)
-                {
-                    await this.oneDriveClient.AuthenticateAsync();
-                    // Show user we are connected.
-                    txtBox_Response.Text = ("We are authenticated and connected! \r\n Now press the button to get the Drive ID from OneDrive!");
-                }
-                else
-                {
-                    // Show user we are already connected.
-                    txtBox_Response.Text = ("You are already connected");
-                }
-                // Light up the button to allow attempt to get OneDrive Drive Id.
+                    // Show in text box that we are connected.
+                    txtBox_Response.Text = "We are now connected";
 
-                // We are either just autheticated and connected or we already connected, either way we need the drive button now.
-                btn_GetDriveId.Visibility = Visibility.Visible;
-            }
-            catch (OneDriveException exception)
-            {
-                // Eating the authentication cancelled exceptions and resetting our client. 
-                if (!exception.IsMatch(OneDriveErrorCode.AuthenticationCancelled.ToString()))
+                    // We are either just autheticated and connected or we already connected, either way we need the drive button now.
+                    btn_GetDriveId.Visibility = Visibility.Visible;
+                }
+                catch (OneDriveException exception)
                 {
-                    if (exception.IsMatch(OneDriveErrorCode.AuthenticationFailure.ToString()))
+                    // Eating the authentication cancelled exceptions and resetting our client. 
+                    if (!exception.IsMatch(OneDriveErrorCode.AuthenticationCancelled.ToString()))
                     {
-                        txtBox_Response.Text = "Authentication failed (did you cancel?), disposing of the client...";
+                        if (exception.IsMatch(OneDriveErrorCode.AuthenticationFailure.ToString()))
+                        {
+                            txtBox_Response.Text = "Authentication failed (did you cancel?), disposing of the client...";
 
-                        ((OneDriveClient)this.oneDriveClient).Dispose();
-                        this.oneDriveClient = null;
+                            ((OneDriveClient)this.oneDriveClient).Dispose();
+                            this.oneDriveClient = null;
+                        }
+                        else
+                        {
+                            // Or we failed due to someother reason, let get that exception printed out.
+                            txtBox_Response.Text = exception.Error.ToString();
+                        }
                     }
                     else
                     {
-                        // Or we failed due to someother reason, let get that exception printed out.
-                        txtBox_Response.Text = exception.Error.ToString();
+                        ((OneDriveClient)this.oneDriveClient).Dispose();
+                        this.oneDriveClient = null;
                     }
-                }
-                else
-                {
-                    ((OneDriveClient)this.oneDriveClient).Dispose();
-                    this.oneDriveClient = null;
                 }
             }
         }

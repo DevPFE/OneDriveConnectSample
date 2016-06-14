@@ -8,8 +8,14 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Button x:Name="btn_Login" Content="Sign In" Background="AliceBlue"  Foreground="DarkBlue" FontSize="12" FontWeight="Bold" Click="btn_Login_Click"  VerticalAlignment="Top" Margin="29,19,0,0" />
-        <Button x:Name="btn_GetDriveId" Content="Get Drive Id" Background="AliceBlue" Foreground="DarkBlue" FontSize="12" FontWeight="Bold" Click="btn_GetDriveId_Click"  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,19,29,0" Visibility="Collapsed"/>
+        <Button x:Name="btn_Login" Content="Sign In" Background="AliceBlue"  
+                Foreground="DarkBlue" FontSize="12" FontWeight="Bold" Click="btn_Login_Click"  
+                VerticalAlignment="Top" Margin="29,19,0,0" />
+        
+        <Button x:Name="btn_GetDriveId" Content="Get Drive Id" Background="AliceBlue" 
+                Foreground="DarkBlue" FontSize="12" FontWeight="Bold" Click="btn_GetDriveId_Click"  
+                VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,19,29,0" Visibility="Collapsed"/>
+        
         <TextBox x:Name="txtBox_Response" Height="500" Width="300" FontSize="12"/>
     </Grid>
     
