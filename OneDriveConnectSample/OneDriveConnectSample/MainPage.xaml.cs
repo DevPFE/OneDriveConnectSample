@@ -25,7 +25,7 @@ namespace OneDriveConnectSample
     public sealed partial class MainPage : Page
     {
         // Client Apication Id.
-        private string clientId = "000000004418E82B";
+        private string clientId = "YourClientID";
 
         // Return url.
         private string returnUrl = "https://login.live.com/oauth20_desktop.srf";
