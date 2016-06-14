@@ -25,7 +25,7 @@ namespace OneDriveConnectSample
     public sealed partial class MainPage : Page
     {
         // Client Apication Id.
-        private string clientId = "YourClientID";
+        private string clientId = "YourClientIDHere";
 
         // Return url.
         private string returnUrl = "https://login.live.com/oauth20_desktop.srf";
@@ -60,15 +60,18 @@ namespace OneDriveConnectSample
                 if (!this.oneDriveClient.IsAuthenticated)
                 {
                     await this.oneDriveClient.AuthenticateAsync();
+                    // Show user we are connected.
+                    txtBox_Response.Text = ("We are authenticated and connected! \r\n Now press the button to get the Drive ID from OneDrive!");
                 }
-
-                // Show user we are connected.
-                txtBox_Response.Text = string.Format("WE ARE CONNECTED! \n Now press the button to get the Drive ID from OneDrive!");
-
+                else
+                {
+                    // Show user we are already connected.
+                    txtBox_Response.Text = ("You are already connected");
+                }
                 // Light up the button to allow attempt to get OneDrive Drive Id.
-                btn_GetDriveId.Visibility = Visibility.Visible;
 
-                
+                // We are either just autheticated and connected or we already connected, either way we need the drive button now.
+                btn_GetDriveId.Visibility = Visibility.Visible;
             }
             catch (OneDriveException exception)
             {
@@ -98,14 +101,14 @@ namespace OneDriveConnectSample
 
         private async void btn_GetDriveId_Click(object sender, RoutedEventArgs e)
         {
-            if (this.oneDriveClient.IsAuthenticated == true)
+            if (this.oneDriveClient != null && this.oneDriveClient.IsAuthenticated == true)
             {
                 var drive = await this.oneDriveClient.Drive.Request().GetAsync();
                 txtBox_Response.Text = drive.Id.ToString();
             }
             else
             {
-                txtBox_Response.Text = "You are not logged in, login first and allow access before trying to get drive information.";
+                txtBox_Response.Text = "We should never get here::: You are not logged in, login first and allow access before trying to get drive information.";
             }
             
         }
