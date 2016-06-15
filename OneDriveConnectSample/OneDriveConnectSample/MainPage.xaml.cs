@@ -31,7 +31,8 @@ namespace OneDriveConnectSample
         private string returnUrl = "https://login.live.com/oauth20_desktop.srf";
 
         // Define the permission scopes.
-        private static readonly string[] scopes = new string[] { "onedrive.readwrite", "offline_access", "wl.signin", "wl.basic" };
+        private static readonly string[] scopes = new string[] {
+            "onedrive.readwrite", "offline_access", "wl.signin", "wl.basic" };
 
         // Create the OneDriveClient interface.
         private IOneDriveClient oneDriveClient { get; set; }
@@ -47,8 +48,9 @@ namespace OneDriveConnectSample
             {
                 try
                 {
-                    // Setting up the client here, passing in our Client Id, Return Url, Scopes that we want permission to, 
-                    // and building a Web Broker to go do our authentication. 
+                    // Setting up the client here, passing in our Client Id, Return Url, 
+                    // Scopes that we want permission to, and building a Web Broker to 
+                    // go do our authentication. 
                     this.oneDriveClient = await OneDriveClient.GetAuthenticatedMicrosoftAccountClient(
                         clientId,
                         returnUrl,
@@ -58,7 +60,8 @@ namespace OneDriveConnectSample
                     // Show in text box that we are connected.
                     txtBox_Response.Text = "We are now connected";
 
-                    // We are either just autheticated and connected or we already connected, either way we need the drive button now.
+                    // We are either just autheticated and connected or we already connected, 
+                    // either way we need the drive button now.
                     btn_GetDriveId.Visibility = Visibility.Visible;
                 }
                 catch (OneDriveException exception)
@@ -68,7 +71,7 @@ namespace OneDriveConnectSample
                     {
                         if (exception.IsMatch(OneDriveErrorCode.AuthenticationFailure.ToString()))
                         {
-                            txtBox_Response.Text = "Authentication failed (did you cancel?), disposing of the client...";
+                            txtBox_Response.Text = "Authentication failed/cancelled, disposing of the client...";
 
                             ((OneDriveClient)this.oneDriveClient).Dispose();
                             this.oneDriveClient = null;
@@ -97,7 +100,7 @@ namespace OneDriveConnectSample
             }
             else
             {
-                txtBox_Response.Text = "We should never get here::: You are not logged in, login first and allow access before trying to get drive information.";
+                txtBox_Response.Text = "We should never get here...";
             }
             
         }
